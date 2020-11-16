@@ -1,0 +1,85 @@
+<div style="margin-top:50px;">
+    <?php
+
+    echo "<h4>Invoices</h4>";
+    $cus = $_GET['Id'];
+    echo '<a href="/LindseyTest/invoices/Create?Id=' . $cus . '" class="btn btn-primary">Create Invoice</a>';
+    if (count($invoices) > 0) {
+    ?>
+        <div class="row">
+            <?php foreach ($invoices as $inv) { ?>
+                <div class="col-md-3" style="margin: 20px;">
+                    <div class="card" style="width:300px" style="margin: 20px;">
+                        <div class="card-body">
+                            <h4 class="card-title">Invoice #<?php echo $inv["Id"]; ?></h4>
+                            <h5 class="card-title">Created : <?php $date = date_create($inv["DateCreated"]);
+                                                                echo date_format($date, "Y/m/d"); ?></h5>
+                            <p class="card-text">Customer: <?php echo $inv["Name"]; ?></p>
+                            <p class="card-text">Type: <?php echo $inv["Description"]; ?></p>
+                            <h5 class="card-text">Amount Due: <?php echo round($inv["Amount"],2); ?></h5>
+                            <button class="btn btn-sm btn-warning viewitems" data-id='<?php echo $inv["Id"]; ?>'>View Items</button>
+                            <a class="btn btn-sm btn-primary" href='/LindseyTest/payment?InvoiceId=<?php echo $inv["Id"]; ?>&customerId=<?php echo $_GET['Id']; ?>'>View payments</a>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+    <?php
+    }
+
+    ?>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Payments</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+      <div class="form-group body">
+      </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#invoices').DataTable();
+
+        //Get line items for invoices
+        $(".viewitems").click(function() {
+            $(".body").empty();
+            $.get("/LindseyTest/invoices/getitems", {
+                    Id: $(this).data('id'),
+                },
+                function(data, status) {
+                    for (var item in data) {
+                        additems(data[item].Description, data[item].Amount)
+                    }
+
+                    $('#myModal').modal('show');
+                });
+        });
+    });
+
+    function additems(descrip, amount){
+       
+        var html = '<p>Description</p><input style="margin-bottom:10px;" type="text" class="form-control Descriptionline" id="Descriptionline" name="Description" value="'+ descrip + '">' +
+        '<p>Amount</p><input style="margin-bottom:10px;" type="text" class="form-control Amountline" id="Amountline" name="Amountline"  value="'+ amount + '">';
+        $(".body").append(html);
+    }
+</script>

@@ -1,0 +1,24 @@
+<div class="row" style="margin-top: 100px;">
+    <div class="col-md-6 offset-md-3 align-self-center">
+        <div class="card bg-secondary " style="width:500px">
+            <div class="card-body">
+            <h4 class="card-title text-light">Operator Login</h4>
+                <form action="login" method="post">
+                    <div class="form-group">
+                        <label for="username" class="text-light">User Name:</label>
+                        <input type="text" class="form-control" id="Username" placeholder="user name" name="Username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="text-light">Password:</label>
+                        <input type="password" class="form-control" id="Password" placeholder="Enter password" name="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                    <div class="form-group">
+                        <a class="text-light" href="/LindseyTest/Operator/register">Create a profile</a>
+                        <p><?php echo isset($message) ? $message : ""; ?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

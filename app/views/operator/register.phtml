@@ -1,0 +1,28 @@
+<div class="row" style="margin-top: 100px;">
+    <div class="col-md-6 offset-md-3 align-self-center">
+        <div class="card bg-secondary " style="width:500px">
+            <div class="card-body">
+                <h4 class="card-title text-light">Operator Registration</h4>
+                <form action="register" method="post">
+                    <div class="form-group">
+                        <label for="name" class="text-light">Name:</label>
+                        <input type="text" class="form-control" id="Name" placeholder="name" name="Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="username" class="text-light">User Name:</label>
+                        <input type="text" class="form-control" id="Username" placeholder="user name" name="Username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="text-light">Password:</label>
+                        <input type="password" class="form-control" id="Password" placeholder="Enter password" name="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert">
+    <?php echo $message; ?>
+</div>

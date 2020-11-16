@@ -1,0 +1,76 @@
+
+<div style="margin-top:50px;">
+    <h4>Create Invoice</h4>
+    <form>
+        <div class="form-group">
+            <label for="Description">Description</label>
+            <input type="text" class="form-control" id="Description" placeholder="Description" name="Description">
+        </div>
+        <div class="form-group">
+            <label for="Amount">Amount:</label>
+            <input type="text" class="form-control" id="Amount" placeholder="Amount" name="Amount">
+        </div>
+        <div class="form-group items">
+            <label>Items:</label>
+        </div>
+        <div class="form-group">
+            <button id="add" type="button" class="btn btn-danger btn-sm">Add Line Item</button>
+        </div>
+        <input type="hidden" id="Id" name="Id">
+        <button id="create" type="submit" class="btn btn-primary">Create</button>
+    </form>
+
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#add").click(function() {
+
+            var html = '<input style="margin-bottom:10px; type="text" class="form-control Descriptionline" id="Descriptionline" placeholder="Description" name="Description">  <input style="margin-bottom:10px; type="text" class="form-control Amountline" id="Amountline" placeholder="Amount" name="Username">';
+            $(".items").append(html);
+
+        });
+
+        $("#create").click(function() {
+            event.preventDefault();
+            // //Create invoice first
+            var total = 0;
+            var amt1 = parseFloat($("#Amount").val());
+            debugger;
+            $(".Amountline").each(function(index) {
+                var amt2 = parseFloat($(this).val());
+                total = amt1 + amt2;
+               
+            });
+
+            $.post("/LindseyTest/invoices/Create", {
+                    Description: $("#Description").val(),
+                    Amount: total,
+                    CustomerId: '<?php echo $_GET['Id']; ?>'
+                },
+                function(data, status) {
+                    if (data) {
+                        $(".Descriptionline").each(function(index) {
+
+                            var amount = $(this).next().val();
+                            var des = $(this).val();
+                            var invId = data;
+                            //Create lines
+                            $.post("/LindseyTest/invoices/items", {
+                                    Description: des,
+                                    Amount: amount,
+                                    InvoiceId: invId
+                                },
+                                function() {
+                                   location.reload();
+                            });
+
+                        });
+
+                    }
+                });
+
+
+        });
+    });
+</script>

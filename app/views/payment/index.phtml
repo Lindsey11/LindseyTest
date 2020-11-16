@@ -1,0 +1,85 @@
+<div style="margin-top:50px;">
+    <?php
+
+    echo "<h4>Payments For Invoice #"  . $_GET['InvoiceId'] . "</h4>";
+    $cus = $_GET['customerId'];
+    $inv = $_GET['InvoiceId'];
+    echo '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Payment</button>';
+    if (count($payments) > 0) {
+    ?>
+        <table class="table table-bordered table-hover" id="Payments">
+            <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>Amount</th>
+                    <th>Date created</th>
+                    <th>Amount Paid</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php foreach ($payments as $inv) { ?>
+                    <tr>
+                        <td><?php echo $inv["Id"]; ?></td>
+                        <td><?php echo $inv["Amount"]; ?></td>
+                        <td><?php $date = date_create($inv["DateCreated"]); echo date_format($date,"Y/m/d"); ?></td>
+                        <td><?php echo $inv["Amount"]; ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    <?php
+    }
+
+    ?>
+</div>
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add payment</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="Amount">Amount</label>
+                        <input type="text" class="form-control" id="Amount" placeholder="Amount" name="Amount">
+                    </div>
+                    <button id="create" type="button" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#payments').DataTable();
+
+        $("#create").click(function(event) {
+            event.preventDefault();
+            $.post("/LindseyTest/payment/add", {
+                    Amount: $("#Amount").val(),
+                    CustomerId: <?php echo $_GET['customerId'] ?>,
+                    InvoiceId: <?php echo $_GET['InvoiceId'] ?>
+                },
+                function(data, status) {
+                    if (data != false) {
+                        $('#myModal').modal('hide');
+                        alert("Payment created");
+                        location.reload();
+                    }
+                });
+        });
+
+    });
+</script>
